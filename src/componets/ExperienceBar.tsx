@@ -10,7 +10,7 @@ export function ExperienceBar(props: ExperienceBarProps) {
                 <div style={{ width: `${ props.experience }%` }} />
 
                 <span className="current-experience" style={{ left: `${ props.experience }%` }}>
-                    { `${600 * (Number(props.experience) / 100)}xp` }
+                    { `${Math.round(600 * (Number(props.experience) / 100))}xp` }
                 </span>
             </div>
             <span>600 xp</span>
