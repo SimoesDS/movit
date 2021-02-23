@@ -1,12 +1,16 @@
-export function ExperienceBar() {
+export interface ExperienceBarProps {
+    experience: string;
+}
+
+export function ExperienceBar(props: ExperienceBarProps) {
     return (
         <header className="experience-bar">
             <span>0 xp</span>
             <div>
-                <div style={{ width: '50%' }} />
+                <div style={{ width: `${ props.experience }%` }} />
 
-                <span className="current-experience" style={{ left: '50%' }}>
-                    300xp
+                <span className="current-experience" style={{ left: `${ props.experience }%` }}>
+                    { `${600 * (Number(props.experience) / 100)}xp` }
                 </span>
             </div>
             <span>600 xp</span>
