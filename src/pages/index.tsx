@@ -7,6 +7,7 @@ import { CompletedChallenges } from '../componets/CompletedChallenges';
 import { Countdown } from '../componets/Countdown';
 import { ChallengeBox } from '../componets/ChallengeBox';
 import { CountdownProvider } from '../contexts/CountdownContext';
+import { ModalLevelUp } from '../componets/ModalLevelUp';
 
 export default function Home() {
   return (
@@ -14,12 +15,13 @@ export default function Home() {
       <Head>
         <title>Iício | MoveIt</title>
       </Head>
-      
+
       <ExperienceBar />
 
       <CountdownProvider>
         <section>
           <div>
+            <ModalLevelUp />
             <Profile />
             <CompletedChallenges />
             <Countdown />
