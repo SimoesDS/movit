@@ -1,63 +1,28 @@
-import { useState, useEffect, useContext } from 'react';
-import { ChallengesContext } from '../contexts/ChallengesContext';
+import { useContext } from 'react';
+import { CountdownContext } from '../contexts/CountdownContext';
 import styles from '../styles/components/Countdown.module.css';
 
-let countdownTimeout: NodeJS.Timeout;
-
 export function Countdown() {
-  const { startNewChallenge } = useContext(ChallengesContext);
+  const {minutes, seconds, hasFinished, isActive, startCountdown, resetCountdown} = useContext(CountdownContext);
 
-  const TIME_COUNTDOWN = 0.05 * 60;
-
-  const [time, setTime] = useState(TIME_COUNTDOWN);
-  const [isActive, setIsActive] = useState(false);
-  const [hasFinished, setHasFinished] = useState(false);
-
-  const minutes = Math.floor(time / 60); // Exemplo => 24h58 | minutes = 24
-  const seconds = time % 60; //  Exemplo => 24h58 | segundos = 58
-
-  const [minuteLeft, minuteRigth] = String(minutes)
+  const [minuteLeft, minuteRight] = String(minutes)
     .padStart(2, '0')
     .split('');
-  const [secondLeft, secondRigth] = String(seconds)
+  const [secondLeft, secondRight] = String(seconds)
     .padStart(2, '0')
     .split('');
-
-  function startCountdown() {
-    isActive ? setIsActive(false) : setIsActive(true)
-  }
-  
-  function resetCountdown() {
-    clearTimeout(countdownTimeout);
-    setIsActive(false);
-    setTime(TIME_COUNTDOWN);
-  }
-
-  useEffect(() => {
-    if(isActive && time > 0) {
-      countdownTimeout = setTimeout(() => {
-        setTime(time - 1);
-      }, 1000);
-    } else {
-      if(isActive && time === 0) {
-        setHasFinished(true);
-        setIsActive(false);
-        startNewChallenge();
-      }
-    }
-  }, [isActive, time])
 
   return (
     <div>
       <div className={ styles.countdownContainer }>
         <div>
           <span>{minuteLeft}</span>
-          <span>{minuteRigth}</span>
+          <span>{minuteRight}</span>
         </div>
         <span>:</span>
         <div>
           <span>{secondLeft}</span>
-          <span>{secondRigth}</span>
+          <span>{secondRight}</span>
         </div>
       </div>
       
@@ -84,7 +49,7 @@ export function Countdown() {
               className={ styles.countdownButton }
               onClick={startCountdown}
             >
-                Iniciar contador
+                Iniciar um ciclo
             </button>
             
           )}
