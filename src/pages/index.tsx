@@ -11,26 +11,29 @@ import { ModalLevelUp } from '../componets/ModalLevelUp';
 
 export default function Home() {
   return (
-    <div className={ styles.container }>
-      <Head>
-        <title>Iício | MoveIt</title>
-      </Head>
+    <>
+      <ModalLevelUp />
 
-      <ExperienceBar />
+      <div className={ styles.container }>
+        <Head>
+          <title>Iício | MoveIt</title>
+        </Head>
 
-      <CountdownProvider>
-        <section>
-          <div>
-            <ModalLevelUp />
-            <Profile />
-            <CompletedChallenges />
-            <Countdown />
-          </div>
-          <div>
-            <ChallengeBox />
-          </div>
-        </section>
-      </CountdownProvider>
-    </div>
+        <ExperienceBar />
+
+        <CountdownProvider>
+          <section>
+            <div>
+              <Profile />
+              <CompletedChallenges />
+              <Countdown />
+            </div>
+            <div>
+              <ChallengeBox />
+            </div>
+          </section>
+        </CountdownProvider>
+      </div>
+    </>
   )
 }

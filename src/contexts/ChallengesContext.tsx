@@ -19,6 +19,7 @@ interface ChallengesContextData {
     startNewChallenge: () => void;
     resetChallenge: () => void;
     completedChallenge: () => void;
+    desativateModalTeste: () => void;
 }
 
 interface ChallengesProviderProps{
@@ -39,27 +40,31 @@ export function ChallengesProvider({children}: ChallengesProviderProps){
 
   const experienceToNextLevel = Math.pow((level + 1) * 4, 2)
 
-    function levelUp(){
-        setLevel(level + 1);
-    }
+  function levelUp(){
+      setLevel(level + 1);
+  }
 
   function completedChallenge () {
     if(!activeChallenge) return;
 
     const { amount } = activeChallenge
     let experienceAfterCompletedChallenge =  amount + currentExperience;
-    let leveledUp = false;    
+    let hasLeveledUp = false;    
     
     if(experienceAfterCompletedChallenge >= experienceToNextLevel) {
       experienceAfterCompletedChallenge = experienceAfterCompletedChallenge - experienceToNextLevel;
       levelUp();
-      leveledUp = true;
+      hasLeveledUp = true;
     }
 
     setCurrentExperience(experienceAfterCompletedChallenge);
     setActiveChallenge(null);
     setChallengesCompleted(challengesCompleted + 1);
-    setIsActiveModalTeste(leveledUp);
+    setIsActiveModalTeste(hasLeveledUp);
+  }
+
+  function desativateModalTeste() {
+    setIsActiveModalTeste(false);
   }
 
   function startNewChallenge() {
@@ -97,6 +102,7 @@ export function ChallengesProvider({children}: ChallengesProviderProps){
       startNewChallenge,
       resetChallenge,
       completedChallenge,
+      desativateModalTeste
       }}>
       { children }
     </ChallengesContext.Provider>
