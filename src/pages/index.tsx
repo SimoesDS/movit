@@ -7,33 +7,28 @@ import { CompletedChallenges } from '../componets/CompletedChallenges';
 import { Countdown } from '../componets/Countdown';
 import { ChallengeBox } from '../componets/ChallengeBox';
 import { CountdownProvider } from '../contexts/CountdownContext';
-import { ModalLevelUp } from '../componets/ModalLevelUp';
 
 export default function Home() {
   return (
-    <>
-      <ModalLevelUp />
+    <div className={ styles.container }>
+      <Head>
+        <title>Iício | MoveIt</title>
+      </Head>
+      
+      <ExperienceBar />
 
-      <div className={ styles.container }>
-        <Head>
-          <title>Iício | MoveIt</title>
-        </Head>
-
-        <ExperienceBar />
-
-        <CountdownProvider>
-          <section>
-            <div>
-              <Profile />
-              <CompletedChallenges />
-              <Countdown />
-            </div>
-            <div>
-              <ChallengeBox />
-            </div>
-          </section>
-        </CountdownProvider>
-      </div>
-    </>
+      <CountdownProvider>
+        <section>
+          <div>
+            <Profile />
+            <CompletedChallenges />
+            <Countdown />
+          </div>
+          <div>
+            <ChallengeBox />
+          </div>
+        </section>
+      </CountdownProvider>
+    </div>
   )
 }

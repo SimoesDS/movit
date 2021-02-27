@@ -1,4 +1,4 @@
-import { createContext, useState, ReactNode, useEffect, useContext } from 'react';
+import { createContext, useState, ReactNode, useEffect } from 'react';
 
 import challenges from '../../challenges.json';
 
@@ -14,12 +14,10 @@ interface ChallengesContextData {
     challengesCompleted: number;
     activeChallenge: Challenge;
     experienceToNextLevel: number,
-    isActiveModalTeste: boolean,
     levelUp: () => void;
     startNewChallenge: () => void;
     resetChallenge: () => void;
     completedChallenge: () => void;
-    desativateModalTeste: () => void;
 }
 
 interface ChallengesProviderProps{
@@ -29,42 +27,33 @@ interface ChallengesProviderProps{
 export const ChallengesContext = createContext({} as ChallengesContextData);
 
 export function ChallengesProvider({children}: ChallengesProviderProps){
-
   const [level, setLevel] = useState(1);
   const [currentExperience, setCurrentExperience] = useState(0);
   const [challengesCompleted, setChallengesCompleted] = useState(0);
   
   const [activeChallenge, setActiveChallenge] = useState(null as Challenge);
 
-  const [isActiveModalTeste, setIsActiveModalTeste] = useState(false);
-
   const experienceToNextLevel = Math.pow((level + 1) * 4, 2)
 
-  function levelUp(){
-      setLevel(level + 1);
-  }
+    function levelUp(){
+        setLevel(level + 1);
+    }
 
   function completedChallenge () {
     if(!activeChallenge) return;
 
     const { amount } = activeChallenge
     let experienceAfterCompletedChallenge =  amount + currentExperience;
-    let hasLeveledUp = false;    
+    
     
     if(experienceAfterCompletedChallenge >= experienceToNextLevel) {
       experienceAfterCompletedChallenge = experienceAfterCompletedChallenge - experienceToNextLevel;
       levelUp();
-      hasLeveledUp = true;
     }
 
     setCurrentExperience(experienceAfterCompletedChallenge);
     setActiveChallenge(null);
     setChallengesCompleted(challengesCompleted + 1);
-    setIsActiveModalTeste(hasLeveledUp);
-  }
-
-  function desativateModalTeste() {
-    setIsActiveModalTeste(false);
   }
 
   function startNewChallenge() {
@@ -97,12 +86,10 @@ export function ChallengesProvider({children}: ChallengesProviderProps){
       challengesCompleted, 
       activeChallenge,
       experienceToNextLevel,
-      isActiveModalTeste,
       levelUp,
       startNewChallenge,
       resetChallenge,
-      completedChallenge,
-      desativateModalTeste
+      completedChallenge
       }}>
       { children }
     </ChallengesContext.Provider>
