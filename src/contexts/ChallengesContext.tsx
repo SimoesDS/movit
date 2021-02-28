@@ -1,4 +1,5 @@
 import { createContext, useState, ReactNode, useEffect } from 'react';
+import Cookie from 'js-cookie';
 
 import challenges from '../../challenges.json';
 
@@ -22,15 +23,18 @@ interface ChallengesContextData {
 
 interface ChallengesProviderProps{
     children: ReactNode;
+    level: number;
+    currentExperience: number;
+    challengesCompleted: number;
 }
 
 export const ChallengesContext = createContext({} as ChallengesContextData);
 
-export function ChallengesProvider({children}: ChallengesProviderProps){
-  const [level, setLevel] = useState(1);
-  const [currentExperience, setCurrentExperience] = useState(0);
-  const [challengesCompleted, setChallengesCompleted] = useState(0);
-  
+export function ChallengesProvider({ children, ...restProps }: ChallengesProviderProps){
+  const [level, setLevel] = useState(restProps.level);
+  const [currentExperience, setCurrentExperience] = useState(restProps.currentExperience);
+  const [challengesCompleted, setChallengesCompleted] = useState(restProps.challengesCompleted);
+
   const [activeChallenge, setActiveChallenge] = useState(null as Challenge);
 
   const experienceToNextLevel = Math.pow((level + 1) * 4, 2)
@@ -44,8 +48,7 @@ export function ChallengesProvider({children}: ChallengesProviderProps){
 
     const { amount } = activeChallenge
     let experienceAfterCompletedChallenge =  amount + currentExperience;
-    
-    
+
     if(experienceAfterCompletedChallenge >= experienceToNextLevel) {
       experienceAfterCompletedChallenge = experienceAfterCompletedChallenge - experienceToNextLevel;
       levelUp();
@@ -79,11 +82,17 @@ export function ChallengesProvider({children}: ChallengesProviderProps){
     Notification.requestPermission();
   }, []); // Array vazio para executar apenas uma vez quando o componente for exibido em tela
 
+  useEffect(() => {
+    Cookie.set('level', String(level));
+    Cookie.set('currentExperience', String(currentExperience));
+    Cookie.set('challengesCompleted', String(challengesCompleted));
+  }, [level, currentExperience, challengesCompleted])
+
   return (
-    <ChallengesContext.Provider value={{ 
-      level, 
-      currentExperience, 
-      challengesCompleted, 
+    <ChallengesContext.Provider value={{
+      level,
+      currentExperience,
+      challengesCompleted,
       activeChallenge,
       experienceToNextLevel,
       levelUp,
@@ -93,5 +102,5 @@ export function ChallengesProvider({children}: ChallengesProviderProps){
       }}>
       { children }
     </ChallengesContext.Provider>
-  )   
+  )
 }
