@@ -1,7 +1,7 @@
-import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
+import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import { ChallengesContext } from './ChallengesContext';
 
-let countdownTimeout: NodeJS.Timeout;
+let countdownTimeout: ReturnType<typeof setTimeout>;
 
 interface CountdownContextData {
     minutes: number;
@@ -16,12 +16,12 @@ interface CountdownProviderProps {
     children: ReactNode;
 }
 
-export const CountdownContext = createContext({} as CountdownContextData)
+export const CountdownContext = createContext({} as CountdownContextData);
 
-export function CountdownProvider({children}: CountdownProviderProps) {
+export function CountdownProvider({ children }: CountdownProviderProps) {
     const { startNewChallenge } = useContext(ChallengesContext);
-    
-    const TIME_COUNTDOWN = 0.05 * 60;
+
+    const TIME_COUNTDOWN = 25 * 60;
 
     const [time, setTime] = useState(TIME_COUNTDOWN);
     const [isActive, setIsActive] = useState(false);
@@ -32,37 +32,39 @@ export function CountdownProvider({children}: CountdownProviderProps) {
 
     function startCountdown() {
         setIsActive(true);
-      }
-      
-      function resetCountdown() {
+    }
+
+    function resetCountdown() {
         clearTimeout(countdownTimeout);
         setIsActive(false);
         setTime(TIME_COUNTDOWN);
         setHasFinished(false);
-      }
-    
-      useEffect(() => {
-        if(isActive && time > 0) {
-          countdownTimeout = setTimeout(() => {
-            setTime(time - 1);
-          }, 1000);
-        } else if(isActive && time === 0){
+    }
+
+    useEffect(() => {
+        if (isActive && time > 0) {
+            countdownTimeout = setTimeout(() => {
+                setTime(time - 1);
+            }, 1000);
+        } else if (isActive && time === 0) {
             setHasFinished(true);
             setIsActive(false);
             startNewChallenge();
-          }
-      }, [isActive, time]);
+        }
+    }, [isActive, time]);
 
     return (
-        <CountdownContext.Provider value={{
-            minutes,
-            seconds,
-            hasFinished,
-            isActive,
-            startCountdown,
-            resetCountdown
-        }}>
+        <CountdownContext.Provider
+            value={{
+                minutes,
+                seconds,
+                hasFinished,
+                isActive,
+                startCountdown,
+                resetCountdown
+            }}
+        >
             {children}
         </CountdownContext.Provider>
-    )
+    );
 }
